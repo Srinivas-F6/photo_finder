@@ -1,127 +1,342 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import "./App.css"
+import "./App.css";
+
 function RadioButtonGroup() {
   const options = [
-    "High school(elementry school)",
     "Aditya University",
-    "Aditya College of Engineering",
+    "Aditya Engineering College",
+    "Aditya College of Engineering and Technology",
     "Aditya Polytechnic 1",
     "Aditya Polytechnic 2",
-    "T-Hub Fans",
-    "Random Generator"
   ];
+
   const [selectedOption, setSelectedOption] = useState("");
   const [rollno, setRoll] = useState("");
   const [imgUrl, setImgUrl] = useState("");
   const [showAnimation, setShowAnimation] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleRollChange = (e) => {
-    setRoll(e.target.value.trim());
+    setRoll(e.target.value);
   };
 
   const handleCollegeChange = (event) => {
     setSelectedOption(event.target.value);
+    setImgUrl("");
   };
 
+  let url = "";
   const generateImage = () => {
-    let url = "";
-   if (selectedOption === options[0]) {
-      url = `https://info.aec.edu.in/aus/StudentPhotos_Original/${rollno}.jpg?ver=130826024759`;
-    } 
-   else if (selectedOption === options[1]) {
-      url = `https://info.aec.edu.in/AEC/StudentPhotos/${rollno}.jpg`;
-    } else if (selectedOption === options[2]) {
-      url = `https://info.aec.edu.in/ACET/StudentPhotos/${rollno}.jpg`;
-    } else if (selectedOption === options[3]) {
-      url = `https://info.aec.edu.in/aecpoly/StudentPhotos/${rollno}.jpg`;
-    } else if (selectedOption === options[4]) {
-      url = `https://info.aec.edu.in/saipoly/StudentPhotos/${rollno}.jpg`;
-    } else if (selectedOption === options[5]) {
-      let up = rollno.toUpperCase();
-      url = `https://mobile.technicalhub.io:5010/student/${up}.png`;
-    } else if (selectedOption === options[6]) {
-      let originalClass = "23MH1A42";
-      let random = Math.floor(Math.random() * 71) + 1;
-      url = `https://info.aec.edu.in/ACET/StudentPhotos/${originalClass + random}.jpg`;
+    if (!rollno || !selectedOption) {
+      alert("Please enter roll number and select your college.");
+      return;
     }
+
+
+    if (selectedOption === options[0]) {
+      url = `https://info.aec.edu.in/aus/StudentPhotos_Original/${rollno.trim()}.jpg?ver=130826024759`;
+    } else if (selectedOption === options[1]) {
+      url = `https://info.aec.edu.in/AEC/StudentPhotos/${rollno.trim()}.jpg`;
+    } else if (selectedOption === options[2]) {
+      url = `https://info.aec.edu.in/ACET/StudentPhotos/${rollno.trim()}.jpg`;
+    } else if (selectedOption === options[3]) {
+      url = `https://info.aec.edu.in/aecpoly/StudentPhotos/${rollno.trim()}.jpg`;
+    } else if (selectedOption === options[4]) {
+      url = `https://info.aec.edu.in/saipoly/StudentPhotos/${rollno.trim()}.jpg`;
+    }
+
+    setLoading(true);
     setImgUrl(url);
     setShowAnimation(true);
-    setTimeout(() => setShowAnimation(false), 5000);
+
+    setTimeout(() => {
+      setShowAnimation(false);
+      setLoading(false);
+    }, 3000);
   };
 
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 overflow-hidden">
-      {showAnimation && (
-        <AnimatePresence>
-          {[...Array(20)].map((_, i) => (
+    <div className="app">
+
+      {/* Animated Background */}
+      <div className="background">
+        <div className="gradient-orb orb1"></div>
+        <div className="gradient-orb orb2"></div>
+        <div className="gradient-orb orb3"></div>
+
+        {[...Array(25)].map((_, i) => (
+          <motion.span
+            key={i}
+            className="particle"
+            initial={{
+              x: Math.random() * window.innerWidth,
+              y: Math.random() * window.innerHeight,
+              opacity: 0,
+            }}
+            animate={{
+              y: [null, Math.random() * -300],
+              opacity: [0, 0.7, 0],
+            }}
+            transition={{
+              duration: 5 + Math.random() * 5,
+              repeat: Infinity,
+              delay: Math.random() * 5,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Falling Images */}
+      <AnimatePresence>
+        {showAnimation &&
+          [...Array(20)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute text-4xl"
-              style={{ left: `${Math.random() * 100}%`, top: "-10%" }}
-              initial={{ opacity: 7, y: -50 }}
-              animate={{ opacity: 1, y: "110vh" }}
+              className="falling-photo"
+              initial={{
+                opacity: 0,
+                y: -100,
+                x: Math.random() * window.innerWidth,
+                rotate: Math.random() * 90 - 45,
+                scale: 0.4,
+              }}
+              animate={{
+                opacity: [0, 1, 1, 0],
+                y: window.innerHeight + 200,
+                rotate: Math.random() * 720 - 360,
+                scale: [0.4, 0.8, 0.6],
+              }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 5, ease: "linear" }}
+              transition={{
+                duration: 3 + Math.random() * 2,
+                ease: "linear",
+                delay: Math.random() * 1.5,
+              }}
             >
-            <img src="https://info.aec.edu.in/ACET/StudentPhotos/23MH1A42.jpg" width={80} />
+              🤡
             </motion.div>
           ))}
-        </AnimatePresence>
-      )}
-    <marquee behavior="" direction=""><img src="https://info.aec.edu.in/ACET/StudentPhotos/23MH1A42.jpg" alt=""  width={80}/></marquee>
-      <div className="bg-white shadow-lg rounded-lg p-6 max-w-md w-full relative z-10">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4 text-center">
-          Student Photo Finder
-        </h2>
+      </AnimatePresence>
 
-        <div className="mb-4">
-          <label className="block text-gray-700 font-medium">Roll Number</label>
-          <input
-            type="text"
-            value={rollno}
-            onChange={handleRollChange}
-            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter Roll Number"
-          />
-        </div>
+      {/* Main Content */}
+      <div className="content">
 
-        <div className="mb-4">
-          <p className="text-gray-700 font-medium">Select College:</p>
-          {options.map((option, index) => (
-            <label key={index} className="flex items-center space-x-2 my-2">
-              <input
-                type="radio"
-                name="radioGroup"
-                value={option}
-                checked={selectedOption === option}
-                onChange={handleCollegeChange}
-                className="w-4 h-4 text-blue-500 focus:ring-blue-500"
-              />
-              <span className="text-gray-700">{option}</span>
-            </label>
-          ))}
-        </div>
-
-        <button
-          onClick={generateImage}
-          className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300"
+        {/* Header */}
+        <motion.div
+          className="header"
+          initial={{ opacity: 0, y: -40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
         >
-          Generate Image
-        </button>
+          <motion.div
+            className="logo"
+            animate={{
+              rotateY: [0, 360],
+            }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+          >
+            🎓
+          </motion.div>
 
-        {imgUrl && (
-          <div className="mt-4 flex justify-center">
-            <img
-              src={imgUrl}
-              alt="Generated Student Photo"
-              className="w-50 h-45 object-cover border border-gray-300 rounded-md"
-            />
+          <h1>Student Photo Finder</h1>
+
+          <p>
+            Enter your roll number and select your college
+          </p>
+        </motion.div>
+
+        {/* 3D Card */}
+        <motion.div
+          className="card"
+          initial={{
+            opacity: 0,
+            scale: 0.7,
+            rotateX: 20,
+          }}
+          animate={{
+            opacity: 1,
+            scale: 1,
+            rotateX: 0,
+          }}
+          transition={{
+            duration: 0.8,
+            type: "spring",
+          }}
+          whileHover={{
+            rotateX: 2,
+            rotateY: -2,
+            scale: 1.01,
+          }}
+        >
+
+          {/* Card Shine */}
+          <div className="card-shine"></div>
+
+          {/* Roll Number */}
+          <div className="input-section">
+            <label>Roll Number</label>
+
+            <div className="input-wrapper">
+              <span>🎫</span>
+
+              <input
+                type="text"
+                value={rollno}
+                onChange={handleRollChange}
+                placeholder="Enter your roll number"
+              />
+            </div>
           </div>
-        )}
+
+          {/* College */}
+          <div className="college-section">
+
+            <label>Select College</label>
+
+            <div className="options">
+
+              {options.map((option, index) => (
+                <motion.label
+                  key={index}
+                  className={`radio-card ${
+                    selectedOption === option ? "selected" : ""
+                  }`}
+                  whileHover={{
+                    scale: 1.02,
+                    x: 5,
+                  }}
+                  whileTap={{
+                    scale: 0.98,
+                  }}
+                >
+
+                  <input
+                    type="radio"
+                    name="college"
+                    value={option}
+                    checked={selectedOption === option}
+                    onChange={handleCollegeChange}
+                  />
+
+                  <span className="custom-radio">
+                    <span></span>
+                  </span>
+
+                  <span className="college-name">
+                    {option}
+                  </span>
+
+                  {selectedOption === option && (
+                    <motion.span
+                      className="check"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                    >
+                      ✓
+                    </motion.span>
+                  )}
+
+                </motion.label>
+              ))}
+
+            </div>
+          </div>
+
+          {/* Button */}
+          <motion.button
+            className="generate-btn"
+            onClick={generateImage}
+            whileHover={{
+              scale: 1.03,
+              boxShadow: "0 15px 35px rgba(99,102,241,0.5)",
+            }}
+            whileTap={{
+              scale: 0.95,
+            }}
+          >
+            <span>
+              {loading ? "Generating..." : "Generate Student Photo"}
+            </span>
+
+            {!loading && <span className="arrow">→</span>}
+          </motion.button>
+
+          {/* Image Result */}
+          <AnimatePresence mode="wait">
+
+            {imgUrl && (
+              <motion.div
+                className="result"
+                initial={{
+                  opacity: 0,
+                  scale: 0.5,
+                  rotateY: 90,
+                }}
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                  rotateY: 0,
+                }}
+                exit={{
+                  opacity: 0,
+                  scale: 0.5,
+                }}
+                transition={{
+                  duration: 0.8,
+                  type: "spring",
+                }}
+              >
+
+                <div className="result-title">
+                  <span>✨</span>
+                  Student Photo
+                </div>
+
+                <motion.div
+                  className="photo-container"
+                  whileHover={{
+                    rotateY: 10,
+                    rotateX: -5,
+                    scale: 1.05,
+                  }}
+                >
+                  <img
+                    src={imgUrl}
+                    alt="Student"
+                    onError={(e) => {
+                      e.currentTarget.style.display = "none";
+                    }}
+                  />
+                </motion.div>
+
+                <p className="roll-display">
+                  {rollno.toUpperCase()}
+                </p>
+
+              </motion.div>
+            )}
+
+          </AnimatePresence>
+
+        </motion.div>
+
+        {/* Footer */}
+        <motion.div
+          className="footer"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1 }}
+        >
+          🙈🙉🙊
+        </motion.div>
+
       </div>
     </div>
-    
   );
 }
 
