@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import "./App.css"
 function RadioButtonGroup() {
   const options = [
+    "High school(elementry school)",
     "Aditya University",
     "Aditya College of Engineering",
     "Aditya Polytechnic 1",
@@ -25,18 +26,21 @@ function RadioButtonGroup() {
 
   const generateImage = () => {
     let url = "";
-    if (selectedOption === options[0]) {
+   if (selectedOption === options[0]) {
+      url = `https://info.aec.edu.in/aus/StudentPhotos_Original/${rollno}.jpg?ver=130826024759`;
+    } 
+   else if (selectedOption === options[1]) {
       url = `https://info.aec.edu.in/AEC/StudentPhotos/${rollno}.jpg`;
-    } else if (selectedOption === options[1]) {
-      url = `https://info.aec.edu.in/ACET/StudentPhotos/${rollno}.jpg`;
     } else if (selectedOption === options[2]) {
-      url = `https://info.aec.edu.in/aecpoly/StudentPhotos/${rollno}.jpg`;
+      url = `https://info.aec.edu.in/ACET/StudentPhotos/${rollno}.jpg`;
     } else if (selectedOption === options[3]) {
-      url = `https://info.aec.edu.in/saipoly/StudentPhotos/${rollno}.jpg`;
+      url = `https://info.aec.edu.in/aecpoly/StudentPhotos/${rollno}.jpg`;
     } else if (selectedOption === options[4]) {
+      url = `https://info.aec.edu.in/saipoly/StudentPhotos/${rollno}.jpg`;
+    } else if (selectedOption === options[5]) {
       let up = rollno.toUpperCase();
       url = `https://mobile.technicalhub.io:5010/student/${up}.png`;
-    } else if (selectedOption === options[5]) {
+    } else if (selectedOption === options[6]) {
       let originalClass = "23MH1A42";
       let random = Math.floor(Math.random() * 71) + 1;
       url = `https://info.aec.edu.in/ACET/StudentPhotos/${originalClass + random}.jpg`;
