@@ -87,7 +87,7 @@ function RadioButtonGroup() {
         ))}
       </div>
 
-      {/* Falling Images */}
+      {/* Falling Images
       <AnimatePresence>
   {showAnimation &&
     [...Array(20)].map((_, i) => (
@@ -120,7 +120,7 @@ function RadioButtonGroup() {
         🧐
       </motion.div>
     ))}
-</AnimatePresence>
+</AnimatePresence> */}
 
       {/* Main Content */}
       <div className="content">
